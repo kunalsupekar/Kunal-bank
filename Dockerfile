@@ -1,6 +1,10 @@
 # Stage 1: Build the Spring Boot application
 FROM maven:3.8.4-openjdk-17 AS builder
 
+# Use the official OpenJDK 17 JRE image as the base image
+FROM openjdk:17-jre-alpine
+
+
 # Set the working directory inside the container
 WORKDIR /app
 
