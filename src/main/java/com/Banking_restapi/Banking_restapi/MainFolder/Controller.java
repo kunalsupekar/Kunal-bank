@@ -32,7 +32,7 @@ public class Controller {
 	
 	@GetMapping("/bank")
 	public String testing() {
-		return "Done!";
+		return "hello bank!";
 		
 	}
 	
