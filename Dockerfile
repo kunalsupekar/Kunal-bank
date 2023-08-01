@@ -1,7 +1,5 @@
-
-# Use the official OpenJDK 17 image as the base image
-FROM openjdk:17-jdk-alpine AS builder
-
+# Stage 1: Build the Spring Boot application
+FROM maven:3.8.4-openjdk-17 AS builder
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -18,7 +16,7 @@ COPY src ./src
 # Build the Spring Boot application
 RUN mvn package
 
-# Multi-stage build to reduce image size
+# Stage 2: Create the final Docker image
 FROM adoptopenjdk:17-jre-hotspot
 
 # Set the working directory inside the container
