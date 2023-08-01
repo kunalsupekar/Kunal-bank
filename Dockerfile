@@ -1,32 +1,15 @@
-# Stage 1: Build the Spring Boot application
-FROM maven:3.8.4-openjdk-17 AS builder
+#
+# Build stage
+#
+FROM maven:3.8.2-jdk-11 AS build
+COPY . .
+RUN mvn clean package -DskipTests
 
-# Set the working directory inside the container
-WORKDIR /app
-
-# Copy the pom.xml to the container
-COPY pom.xml ./
-
-# Download the project dependencies, but do not build the application yet
-RUN mvn dependency:go-offline
-
-# Copy the rest of the source code to the container
-COPY src ./src
-
-# Build the Spring Boot application
-RUN mvn package
-
-# Stage 2: Create the final Docker image
-FROM adoptopenjdk:17-jre-hotspot
-
-# Set the working directory inside the container
-WORKDIR /app
-
-# Copy the JAR file from the builder stage to the final image
-COPY --from=builder /app/target/*.jar app.jar
-
-# Expose the port that your Spring Boot application listens on (if necessary)
+#
+# Package stage
+#
+FROM openjdk:11-jdk-slim
+COPY --from=build /target/demo-0.0.1-SNAPSHOT.jar demo.jar
+# ENV PORT=8080
 EXPOSE 8080
-
-# Define the command to run your Spring Boot application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java","-jar","demo.jar"]
