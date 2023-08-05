@@ -3,6 +3,7 @@ import java.util.List;
 
 import com.Banking_restapi.Banking_restapi.MainFolder.Admin_Details;
 import com.Banking_restapi.Banking_restapi.MainFolder.Customer_Details;
+import com.Banking_restapi.Banking_restapi.MainFolder.Loans;
 import com.Banking_restapi.Banking_restapi.MainFolder.Transaction;
 import com.Banking_restapi.Banking_restapi.MainFolder.Transfermoney;
 
@@ -37,6 +38,8 @@ public interface BankServices {
 	public Admin_Details validateAdminLogin(String username, String password);
 
 	public List<Transaction> get_Admin_transactions();
+
+	public String applyforloans(Loans formdata);
 	
 	
 	

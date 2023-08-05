@@ -1,9 +1,7 @@
 package com.Banking_restapi.Banking_restapi.MainFolder;
 
-import java.security.PublicKey;
 import java.util.List;
 
-import javax.security.auth.login.AccountException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,13 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.Banking_restapi.Banking_restapi.Services.BankServices;
 
-import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @CrossOrigin
@@ -29,7 +24,7 @@ public class Controller {
 	@Autowired
 	private BankServices bank;
 	
-	
+	//testing purpose
 	@GetMapping("/bank")
 	public String testing() {
 		return "hello bank!";
@@ -164,6 +159,13 @@ public class Controller {
 	    }
 		
 		
+	 
+	 @PostMapping("/loans")
+	    public String  applyloans(@RequestBody Loans formdata) {
+		 System.out.println(formdata);
+	      
+	        return this.bank.applyforloans(formdata);
+	    }
 }
 	
 

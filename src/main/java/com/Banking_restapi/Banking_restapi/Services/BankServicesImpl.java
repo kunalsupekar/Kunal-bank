@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.Banking_restapi.Banking_restapi.MainFolder.Admin_Details;
 import com.Banking_restapi.Banking_restapi.MainFolder.Customer_Details;
+import com.Banking_restapi.Banking_restapi.MainFolder.Loans;
 import com.Banking_restapi.Banking_restapi.MainFolder.Transfermoney;
 import com.Banking_restapi.Banking_restapi.MainFolder.Transaction;
 
@@ -24,7 +25,8 @@ public class BankServicesImpl  implements BankServices {
 	@Autowired
 	private TransactionRepository TransactionRepo;
 	
-	
+	@Autowired
+	private LoanRepository LoanRepo;
 	
 	@Autowired
 	private AdminRepository AdminRepo;
@@ -268,6 +270,15 @@ public class BankServicesImpl  implements BankServices {
 	public List<Transaction> get_Admin_transactions() {
 	
 		return (List<Transaction>) TransactionRepo.findAll();
+	}
+
+	
+	
+	@Override
+	public String applyforloans(Loans data) {
+		
+		LoanRepo.save(data);
+		return "applied";
 	}
 	
 	
