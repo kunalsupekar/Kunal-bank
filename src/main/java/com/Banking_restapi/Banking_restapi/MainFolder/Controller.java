@@ -70,9 +70,10 @@ public class Controller {
 	
 	
 	//deleting the records.
-	@DeleteMapping("/getdetails/{BankId}")
-	public  String deleteCustomer( @PathVariable int BankId) {
-		return this.bank.delteCustomer(BankId);
+	@DeleteMapping("/getdetails/{Accountno}")
+	public  String deleteCustomer( @PathVariable int Accountno) {
+		System.out.println("deleting user"+Accountno);
+		return this.bank.delteCustomer(Accountno);
 	}
 	
 	
@@ -166,6 +167,19 @@ public class Controller {
 	      
 	        return this.bank.applyforloans(formdata);
 	    }
+	 
+	 
+	 @GetMapping("/getadminloans")
+		public List<Loans> get_Admin_loans() {
+			
+			return this.bank.get_Adminloans_applications();
+			
+		}
+	 
+	 
+	 
+	 
+	 
 }
 	
 

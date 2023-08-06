@@ -120,10 +120,10 @@ public class BankServicesImpl  implements BankServices {
 
 
 	@Override
-	public String delteCustomer(int BankId) {
-
-		BankRepo.deleteById(BankId);
-		
+	public String delteCustomer(int Accountno) {
+Customer_Details c1=BankRepo.findByAccountno(Accountno);
+		BankRepo.deleteById(c1.getId());
+		System.out.println("deleted successfully");
 		return "Deleted successfully";
 	}
 
@@ -280,9 +280,22 @@ public class BankServicesImpl  implements BankServices {
 		LoanRepo.save(data);
 		return "applied";
 	}
+
+	@Override
+	public List<Loans> get_Adminloans_applications() {
+		
+		return  (List<Loans>) LoanRepo.findAll();
+		
+	}
+	
+	
+	
 	
 	
 
+	
+	
+	
 	
 		
 }

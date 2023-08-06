@@ -19,7 +19,7 @@ public interface BankServices {
 
 	public Customer_Details updateCustomer(Customer_Details customer);
 	
-	public String delteCustomer(int BankId);
+	public String delteCustomer(int Accountno);
 	
 	public String sendSimpleEmail(String toEmail,String subject, String body); 
 		
@@ -40,6 +40,8 @@ public interface BankServices {
 	public List<Transaction> get_Admin_transactions();
 
 	public String applyforloans(Loans formdata);
+
+	public List<Loans> get_Adminloans_applications();
 	
 	
 	

@@ -9,6 +9,7 @@ public interface BankRepository extends CrudRepository<Customer_Details, Integer
 	
 
 	Customer_Details findByAccountno(int Accountno);
+	
 }
 
 
