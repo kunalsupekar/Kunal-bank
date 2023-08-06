@@ -175,8 +175,16 @@ public class Controller {
 			return this.bank.get_Adminloans_applications();
 			
 		}
-	 
-	 
+
+	    @PutMapping("/loans/{id}")
+	    public String updateLoanStatus(@PathVariable String id, @RequestBody Loans request) {
+	    	  System.out.println("Received ID: " + id);
+	    	String status=request.getStatus();
+	    	int Id = Integer.parseInt(id);
+	    	System.out.println(status+" "+Id);
+	    	
+	    	return this.bank.setloanstatus(Id,status);
+	    }
 	 
 	 
 	 

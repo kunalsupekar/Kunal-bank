@@ -18,16 +18,25 @@ public class Loans {
 	private int accountno;
 	   private int amount;
 	   private String income;
+	   private String status;
+
 
 		private  String existingloan;
 		private String loantype;
 		
 		
-   @Override
+   
+@Override
 		public String toString() {
 			return "Loans [srno=" + srno + ", userid=" + userid + ", name=" + name + ", accountno=" + accountno
-					+ ", amount=" + amount + ", income=" + income + ", existingloan=" + existingloan + ", loantype="
-					+ loantype + "]";
+					+ ", amount=" + amount + ", income=" + income + ", status=" + status + ", existingloan="
+					+ existingloan + ", loantype=" + loantype + "]";
+		}
+public String getStatus() {
+			return status;
+		}
+		public void setStatus(String status) {
+			this.status = status;
 		}
 public int getSrno() {
 		return srno;

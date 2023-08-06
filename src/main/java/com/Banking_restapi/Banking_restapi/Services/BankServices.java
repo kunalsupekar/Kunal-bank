@@ -42,6 +42,9 @@ public interface BankServices {
 	public String applyforloans(Loans formdata);
 
 	public List<Loans> get_Adminloans_applications();
+
+
+	public String setloanstatus(int Id, String status);
 	
 	
 	

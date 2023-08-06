@@ -1,6 +1,6 @@
 package com.Banking_restapi.Banking_restapi.Services;
 import java.util.List;
-
+import java.util.Optional;
 import java.util.Random;
 
 // import org.hibernate.sql.Insert;
@@ -287,6 +287,22 @@ Customer_Details c1=BankRepo.findByAccountno(Accountno);
 		return  (List<Loans>) LoanRepo.findAll();
 		
 	}
+
+	@Override
+	public String setloanstatus(int Id, String status) {
+		Loans l1=LoanRepo.findById(Id).get();
+		l1.setStatus(status);
+		LoanRepo.save(l1);
+		Customer_Details c1=BankRepo.findByAccountno(l1.getAccountno());
+		String email=c1.getEmail();
+		sendSimpleEmail(email, "About loan applications ", " the appliacation of loans "
+				+ "is "+ status +" by the admin" );
+		
+		System.out.println("email sent ");
+		System.out.println("setting status of loan");
+		return null;
+	}
+
 	
 	
 	
