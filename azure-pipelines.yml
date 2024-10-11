@@ -49,3 +49,16 @@ steps:
     sourceFolder: '$(Build.ArtifactStagingDirectory)/cleaned_jars'
     contents: '**/*.jar'
     readyTimeout: '20000'
+- task: SSH@0
+  inputs:
+    sshEndpoint: 'BankingApplicationService'
+    runOptions: 'commands'
+    script: |
+      if ! java -version 2>&1 | grep -q "17"; then
+        echo "Java 17 is not installed. Installing Java 17..."
+        sudo apt update
+        sudo apt install -y openjdk-17-jdk
+      else
+        echo "Java 17 is already installed."
+      fi
+      
