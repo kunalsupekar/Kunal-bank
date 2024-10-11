@@ -20,6 +20,16 @@ steps:
     publishJUnitResults: false
     #testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
-- task: WhiteSource@21
+
+# - task: WhiteSource@21
+#   inputs:
+#     cwd: '$(System.DefaultWorkingDirectory)'
+- task: CopyFiles@2
   inputs:
-    cwd: '$(System.DefaultWorkingDirectory)'
+    Contents: '**/*.jar'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'Jarfile'
+    publishLocation: 'Container'
