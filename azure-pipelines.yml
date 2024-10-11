@@ -1,7 +1,5 @@
 # Maven
 # Build your Java project and run tests with Apache Maven.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
 trigger:
 - main
@@ -20,7 +18,7 @@ steps:
     jdkVersionOption: '1.17'
     jdkArchitectureOption: 'x64'
     publishJUnitResults: false
-    #testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    # testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
 
 # Step to copy JAR files to the artifact staging directory
@@ -42,17 +40,11 @@ steps:
     cp $(Build.ArtifactStagingDirectory)/**/*.jar $(Build.ArtifactStagingDirectory)/cleaned_jars/
   displayName: 'Move JAR files to temporary directory'
 
-# Step to copy the JAR files from the temporary directory to the remote SSH machine
-- task: CopyFilesOverSSH@0
+# Step to conditionally install Java 17 on the remote SSH machine
+- task: Ssh@0
   inputs:
     sshEndpoint: 'BankingApplicationService'
-    sourceFolder: '$(Build.ArtifactStagingDirectory)/cleaned_jars'
-    contents: '**/*.jar'
     readyTimeout: '20000'
-- task: SSH@0
-  inputs:
-    sshEndpoint: 'BankingApplicationService'
-    runOptions: 'commands'
     script: |
       if ! java -version 2>&1 | grep -q "17"; then
         echo "Java 17 is not installed. Installing Java 17..."
@@ -61,4 +53,27 @@ steps:
       else
         echo "Java 17 is already installed."
       fi
-      
+
+# Step to copy the JAR files from the temporary directory to the remote SSH machine
+- task: CopyFilesOverSSH@0
+  inputs:
+    sshEndpoint: 'BankingApplicationService'
+    sourceFolder: '$(Build.ArtifactStagingDirectory)/cleaned_jars'
+    contents: '**/*.jar'
+    targetFolder: '/home/ubuntu'
+    readyTimeout: '20000'
+
+# Step to run the specific JAR file on the remote SSH machine
+- task: Ssh@0
+  inputs:
+    sshEndpoint: 'BankingApplicationService'
+    readyTimeout: '20000'
+    script: |
+      JAR_FILE=/home/ubuntu/Banking_restapi-0.0.1-SNAPSHOT.jar
+      if [ ! -f "$JAR_FILE" ]; then
+        echo "JAR file not found: $JAR_FILE"
+        exit 1
+      fi
+      echo "Running JAR file: $JAR_FILE"
+      nohup java -jar "$JAR_FILE" > /home/ubuntu/banking_restapi.log 2>&1 &
+      echo "JAR file is running in the background."
