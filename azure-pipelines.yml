@@ -10,6 +10,8 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
+
+# Step to build the Maven project and package JAR files
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
@@ -21,15 +23,29 @@ steps:
     #testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
 
-# - task: WhiteSource@21
-#   inputs:
-#     cwd: '$(System.DefaultWorkingDirectory)'
+# Step to copy JAR files to the artifact staging directory
 - task: CopyFiles@2
   inputs:
     Contents: '**/*.jar'
     TargetFolder: '$(build.artifactstagingdirectory)'
+
+# Step to publish build artifacts
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'Jarfile'
     publishLocation: 'Container'
+
+# Step to move the JAR files to a temporary clean directory
+- script: |
+    mkdir -p $(Build.ArtifactStagingDirectory)/cleaned_jars
+    cp $(Build.ArtifactStagingDirectory)/**/*.jar $(Build.ArtifactStagingDirectory)/cleaned_jars/
+  displayName: 'Move JAR files to temporary directory'
+
+# Step to copy the JAR files from the temporary directory to the remote SSH machine
+- task: CopyFilesOverSSH@0
+  inputs:
+    sshEndpoint: 'BankingApplicationService'
+    sourceFolder: '$(Build.ArtifactStagingDirectory)/cleaned_jars'
+    contents: '**/*.jar'
+    readyTimeout: '20000'
