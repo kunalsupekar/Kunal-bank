@@ -40,21 +40,6 @@ steps:
     cp $(Build.ArtifactStagingDirectory)/**/*.jar $(Build.ArtifactStagingDirectory)/cleaned_jars/
   displayName: 'Move JAR files to temporary directory'
 
-# Step to conditionally install Java 17 on the remote SSH machine
-- task: Ssh@0
-  inputs:
-    sshEndpoint: 'BankingApplicationService'
-    readyTimeout: '20000'
-    script: |
-      if ! java -version 2>&1 | grep -q "17"; then
-        echo "Java 17 is not installed. Installing Java 17..."
-        sudo apt update
-        sudo apt install -y openjdk-17-jdk
-      else
-        echo "Java 17 is already installed."
-      fi
-
-# Step to copy the JAR files from the temporary directory to the remote SSH machine
 - task: CopyFilesOverSSH@0
   inputs:
     sshEndpoint: 'BankingApplicationService'
