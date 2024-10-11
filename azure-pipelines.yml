@@ -9,17 +9,33 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  MAVEN_OPTS: "-Xmx3072m"
+  system.debug: true  # Enable debug logging
+
 steps:
+# Checkout the code
+- checkout: self
+
+# Set up JDK 17 using JavaToolInstaller
+- task: JavaToolInstaller@0
+  inputs:
+    versionSpec: '17'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'AdoptOpenJDK' # This can be OpenJDK or any other distribution
+
+# Build the project using Maven
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.17'
-    jdkArchitectureOption: 'x64'
+    goals: 'clean package -DskipTests'
+    options: '-Xmx3072m'
+    javaHomeOption: 'Path'
+    mavenSetM2Home: true
+    mavenVersionOption: 'Default'
     publishJUnitResults: false
-    #testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
+
+# WhiteSource Mend Bolt scan
 - task: WhiteSource@21
   inputs:
     cwd: '$(System.DefaultWorkingDirectory)'
